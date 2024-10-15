@@ -80,7 +80,7 @@ function FieldCheckbox({ type, name, label, description, meta }) {
   return (
     <div key={name}>
       <div className="flex">
-        <FormikField type={type} name={name} id={name} className="mb-1 mr-1" />
+        <FormikField type={type} name={name} id={name} />
         <label className="label" htmlFor={name}>
           {label}
         </label>

@@ -1,37 +1,25 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import Form from "@/components/ui/form/Form.jsx";
 import DynamicForm from "@/components/ui/form/DynamicForm.jsx";
 import { Result } from "@/components/Result.jsx";
 import { Loading } from "@/components/Loading.jsx";
 import { Button } from "@/components/ui/Button.jsx";
-import { fields, validationSchema } from "./fields.js";
-import { useCompany, useCompanyJsonSchema } from "./hooks.js";
-import { useCredentials } from "@/domains/shared/credentials/useCredentials.js";
+import { fields, validationSchema } from "./fields";
+import { useCompany, useCompanyJsonSchema } from "./hooks";
 
 export function CompanyCreation() {
   const [initialFormValues, setInitialFormValues] = useState();
-  const [localCustomerCredentials, setLocalCustomerCredentials] = useState();
-  const navigate = useNavigate();
-  const { updateCustomerCredentials } = useCredentials();
   const { data: jsonSchema, isLoading } = useCompanyJsonSchema(
     initialFormValues?.country_code
   );
-
   const {
     data: responseData,
-    mutate: createCompanyMutation,
+    mutate,
     error,
     isError,
     isPending,
-  } = useCompany({
-    onSuccess: ({ data }) => {
-      if (initialFormValues.get_oauth_access_tokens) {
-        setLocalCustomerCredentials(data.tokens);
-      }
-    },
-  });
+  } = useCompany();
 
   async function handleInitialFormSubmit(values) {
     setInitialFormValues(values);
@@ -58,7 +46,7 @@ export function CompanyCreation() {
       terms_of_service_accepted_at: new Date().toISOString(),
     };
 
-    createCompanyMutation({ queryParams: actionParam, bodyParams: payload });
+    mutate({ queryParams: actionParam, bodyParams: payload });
   }
 
   if (isLoading || isPending) {
@@ -81,24 +69,11 @@ export function CompanyCreation() {
         <>
           {responseData ? (
             <div className="result-area">
-              <Button
-                className=""
-                onClick={() => {
-                  if (localCustomerCredentials) {
-                    updateCustomerCredentials(localCustomerCredentials);
-                  }
-                  navigate("/create-employment");
-                }}
-              >
-                Create new employment
-              </Button>
-              {localCustomerCredentials && (
-                <p className="text-xs my-4">
-                  New employment will be created on behalf of{" "}
-                  <span className="font-bold">{initialFormValues.name}</span>
-                </p>
-              )}
+              <p className="result-message">Company created successfully ✓</p>
               <Result data={responseData} />
+              <Button onClick={() => window.location.reload()}>
+                Start Over
+              </Button>
             </div>
           ) : (
             <div className="flex flex-col items-center">

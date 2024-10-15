@@ -1,10 +1,9 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import { Button } from "@/components/ui/Button.jsx";
 
 const DynamicForm = ({ fields, validationSchema, onSubmit }) => {
-  const [buttonLabel, setButtonLabel] = useState("Submit");
   const initialValues = useMemo(() => {
     return fields.reduce((acc, field) => {
       acc[field.name] = field.defaultValue || "";
@@ -35,7 +34,7 @@ const DynamicForm = ({ fields, validationSchema, onSubmit }) => {
         }
         return acc;
       }, {});
-      setButtonLabel("Submitting...");
+
       onSubmit(castedValues);
     },
   });
@@ -97,7 +96,7 @@ const DynamicForm = ({ fields, validationSchema, onSubmit }) => {
           </div>
         ))}
         <Button type="submit" variant="default">
-          {buttonLabel}
+          Submit
         </Button>
       </form>
     </div>

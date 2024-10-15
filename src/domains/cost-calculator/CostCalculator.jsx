@@ -8,19 +8,8 @@ import { fields, validationSchema } from "./fields";
 
 export function CostCalculator() {
   const { credentials } = useCredentials();
-  const {
-    data: countries,
-    isLoading,
-    error: countriesError,
-    isError: isCountriesError,
-  } = useCountries();
-  const {
-    data: result,
-    mutate,
-    error: estimationError,
-    isError: isEstimationError,
-    isSuccess,
-  } = useEstimation();
+  const { data: countries, isLoading } = useCountries();
+  const { data: result, mutate, error, isError, isSuccess } = useEstimation();
 
   const handleSubmit = async (values) => {
     console.log("Form Submitted with values:", values);
@@ -85,20 +74,8 @@ export function CostCalculator() {
     );
   }
 
-  if (isEstimationError) {
-    return (
-      <p className="text-center error">
-        Error submitting estimation: {estimationError?.message}
-      </p>
-    );
-  }
-
-  if (isCountriesError) {
-    return (
-      <p className="text-center error">
-        Error fetching countries: {countriesError?.message}
-      </p>
-    );
+  if (isError) {
+    return <p className="text-center error">{error}</p>;
   }
 
   if (isLoading) {

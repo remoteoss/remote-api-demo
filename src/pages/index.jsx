@@ -1,11 +1,11 @@
 export function HomePage() {
   return (
     <>
+      <h1 className="h1 self-start m-0">Experience Remote Embedded</h1>
       {/* Static Section for Overview */}
-      <section className="flex flex-col gap-y-6 mx-auto mt-4 max-w-prose ">
-        <h1 className="h1 m-0">Experience Remote Embedded</h1>
+      <section className="flex flex-col gap-y-6 mt-4">
         <div>
-          <h3 className="h3 m-0">About This Tool</h3>
+          <h3 className="h3">About This Tool</h3>
           <p>
             This tool is designed to help partners quickly, easily, and
             efficiently adopt and extend JSON schemas within their own

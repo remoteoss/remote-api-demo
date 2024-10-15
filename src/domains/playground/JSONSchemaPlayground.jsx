@@ -74,15 +74,7 @@ export function JSONSchemaPlayground() {
           <span className="font-bold">Disclaimer:</span> These are static JSON
           Schemas and may be outdated. This page is intended solely to help
           understand how forms are rendered based on JSON Schemas and the
-          generated payload.{" "}
-          <Link
-            className="text-primary"
-            to="https://github.com/remoteoss/remote-api-demo/blob/master/src/domains/playground/JSONSchemaPlayground.jsx"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            See source on GitHub
-          </Link>
+          generated payload.
         </div>
       </div>
       <div className="grow basis-2/4 flex flex-col items-center">

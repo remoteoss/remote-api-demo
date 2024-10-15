@@ -20,7 +20,7 @@ export function EmploymentCreation() {
   // Fetches the JSON schema for the employment form
   const {
     data: jsonSchema,
-    isLoading: isLoadingSchema,
+    isLoading,
     isError,
     error,
   } = useJsonSchema(initialFormValues?.country_code, employmentId);
@@ -88,17 +88,17 @@ export function EmploymentCreation() {
     setSubmissionStatus(null);
   };
 
-  // if (isLoading) {
-  //   return <Loading />;
-  // }
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (isError) {
-    return <p className="error">Error fetching JSON Schema: {error.message}</p>;
+    return <p className="error">{error}</p>;
   }
 
   return (
     <>
-      {!initialFormValues || isLoadingSchema ? (
+      {!initialFormValues ? (
         <DynamicForm
           fields={fields}
           validationSchema={validationSchema}

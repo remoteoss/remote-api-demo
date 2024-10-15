@@ -3,19 +3,17 @@ import axios from "axios";
 
 export const getAccessToken = async () => {
   const credentials = useCredentials.getState().credentials;
-  const refreshToken = useCredentials.getState().refreshToken;
-  const { clientId, clientSecret } = credentials;
+  const { clientId, clientSecret, refreshToken, gatewayUrl } = credentials;
 
-  if (!clientId || !clientSecret || !refreshToken) {
+  if (!clientId || !clientSecret || !refreshToken || !gatewayUrl) {
     const errorMessage = "Error fetching form data: Missing credentials.";
     console.error(errorMessage);
     return null;
   }
 
   const accessToken = useCredentials.getState().customerAccessToken;
-
-  if (accessToken) {
-    return accessToken;
+  if(accessToken) {
+    return accessToken
   }
 
   const encodedCredentials = btoa(`${clientId}:${clientSecret}`);
@@ -34,9 +32,7 @@ export const getAccessToken = async () => {
       }
     );
 
-    useCredentials.setState({
-      customerAccessToken: response.data.access_token,
-    });
+    useCredentials.setState({ customerAccessToken: response.data.access_token });
     return response.data.access_token;
   } catch (error) {
     console.error("Error fetching access token:", error);
@@ -46,18 +42,18 @@ export const getAccessToken = async () => {
 
 export const getClientCredentialsToken = async () => {
   const credentials = useCredentials.getState().credentials;
-
-  const { clientId, clientSecret } = credentials;
-
-  if (!clientId || !clientSecret) {
+  
+  const { clientId, clientSecret, gatewayUrl } = credentials;
+  
+  if (!clientId || !clientSecret || !gatewayUrl) {
     const errorMessage = "Error fetching form data: Missing credentials.";
     console.error(errorMessage);
     return null;
   }
-
+  
   const accessToken = useCredentials.getState().partnerAccessToken;
-  if (accessToken) {
-    return accessToken;
+  if(accessToken) {
+    return accessToken
   }
 
   const encodedCredentials = btoa(`${clientId}:${clientSecret}`);
@@ -74,7 +70,7 @@ export const getClientCredentialsToken = async () => {
         },
       }
     );
-    useCredentials.setState({ partnerAccessToken: response.data.access_token });
+    useCredentials.setState({ partnerAccessToken: response.data.access_token});
     return response.data.access_token;
   } catch (error) {
     console.error("Error fetching access token:", error);
