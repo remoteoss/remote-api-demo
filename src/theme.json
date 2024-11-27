@@ -1,16 +1,18 @@
 {
   "logo": {
-    "src": "/remote.svg",
-    "alt": "Remote logo"
+    "src": "/bhr.svg",
+    "alt": "BHR logo"
   },
   "colors": {
     "black": "#000000",
     "blank": "#ffffff",
-    "primary": "#0061FF",
-    "secondary": "#8d969e",
-    "tertiary": "#FAFCFF",
+    "primary": "#2e7918",
+    "secondary": "#215c10",
+    "tertiary": "#eff6ef",
     "error": "#FF4A5A",
-    "input": "#9AA6B2",
-    "borders": "#E3E9EF"
+    "input": "#215c10",
+    "borders": "#2e7918"
   }
 }
+
+
