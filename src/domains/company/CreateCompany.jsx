@@ -6,7 +6,8 @@ import { Result } from "@/components/Result.jsx";
 import { Loading } from "@/components/Loading.jsx";
 import { Button } from "@/components/ui/Button.jsx";
 import { fields, validationSchema } from "./fields";
-import { useCompany, useCompanyJsonSchema } from "./hooks";
+import { useCompany, useCompanyJsonSchema, useFetchCompanyManagers, useGenerateMagicLink } from "./hooks";
+import { useCredentials } from "@/domains/shared/credentials/useCredentials.js";
 
 export function CompanyCreation() {
   const [initialFormValues, setInitialFormValues] = useState();
@@ -15,11 +16,15 @@ export function CompanyCreation() {
   );
   const {
     data: responseData,
-    mutate,
+    mutate: createCompany,
     error,
     isError,
     isPending,
   } = useCompany();
+
+  const [magicLinkError, setMagicLinkError] = useState("");
+  const { mutateAsync: fetchCompanyManagers } = useFetchCompanyManagers();
+  const { mutateAsync: generateMagicLink } = useGenerateMagicLink();
 
   async function handleInitialFormSubmit(values) {
     setInitialFormValues(values);
@@ -46,8 +51,42 @@ export function CompanyCreation() {
       terms_of_service_accepted_at: new Date().toISOString(),
     };
 
-    mutate({ queryParams: actionParam, bodyParams: payload });
+    createCompany({ queryParams: actionParam, bodyParams: payload });
   }
+  async function updateCredentialsWithCustomToken(customRefreshToken) {
+    useCredentials.setState((state) => ({
+      credentials: {
+        ...state.credentials,
+        refreshToken: customRefreshToken,
+      },
+    }));
+  }
+  async function handleGoToRemote() {
+    try {
+      const customRefreshToken = responseData.data.tokens.refresh_token;
+      console.log("Custom Refresh Token:", customRefreshToken);
+  
+      // Step 1: Update global credentials with the custom token
+      updateCredentialsWithCustomToken(customRefreshToken);
+  
+      // Step 2: Fetch company managers
+      const managers = await fetchCompanyManagers();
+      const owner = managers.find((manager) => manager.role === "owner");
+  
+      if (!owner) {
+        throw new Error("Owner not found in company managers.");
+      }
+  
+      const userId = owner.user_id;
+  
+      // Step 3: Generate magic link
+      const magicLinkUrl = await generateMagicLink({ userId });
+      window.open(magicLinkUrl, "_blank");
+    } catch (error) {
+      console.error("Error generating magic link:", error);
+    }
+  }
+  
 
   if (isLoading || isPending) {
     return <Loading />;
@@ -74,6 +113,13 @@ export function CompanyCreation() {
               <Button onClick={() => window.location.reload()}>
                 Start Over
               </Button>
+              <Button
+                onClick={handleGoToRemote}
+                disabled={!responseData || !responseData.data.tokens.refresh_token}
+              >
+                Go to Remote
+              </Button>
+              {magicLinkError && <p className="error">{magicLinkError}</p>}
             </div>
           ) : (
             <div className="flex flex-col items-center">
