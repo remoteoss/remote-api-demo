@@ -1,17 +1,17 @@
 {
   "logo": {
-    "src": "/bhr.svg",
-    "alt": "BHR logo"
+    "src": "/isolved2.svg",
+    "alt": "isloved logo"
   },
   "colors": {
-    "black": "#000000",
-    "blank": "#ffffff",
-    "primary": "#2e7918",
-    "secondary": "#215c10",
-    "tertiary": "#eff6ef",
-    "error": "#FF4A5A",
-    "input": "#215c10",
-    "borders": "#2e7918"
+    "black": "#1a1a1a",            
+    "blank": "#ffffff",           
+    "primary": "#ec008c",        
+    "secondary": "#008080",       
+    "tertiary": "#f2f2f2",      
+    "error": "#ff4a5a",           
+    "input": "#ec008c",           
+    "borders": "#d9d9d9"          
   }
 }
 

@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://gateway.niceremote.com",
+        target: "https://gateway.remote-sandbox.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

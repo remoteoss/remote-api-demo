@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://gateway.niceremote.com/:path*"
+      "destination": "https://gateway.remote-sandbox.com/:path*"
     }
   ]
 }
